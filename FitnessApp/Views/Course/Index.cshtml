@@ -1,0 +1,86 @@
+﻿@model IEnumerable<FitnessApp.Models.CourseVm>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Courses</h1>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                  @if (User.Identity != null && User.Identity.IsAuthenticated)
+                  {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <span>@Html.ActionLink("Participants", "Enrollers", "Enroll", new {  id = item.Id }) | </span>
+
+                            <span>@Html.ActionLink("Edit", "Edit", new {  id = item.Id }) | </span>
+
+                            <span>@Html.ActionLink("Details", "Details", new { id = item.Id }) | </span>
+
+                            <span>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</span>
+                        }
+                        else
+                        {
+                            <span>@Html.ActionLink("Participants", "Enrollers", "Enroll", new {  id = item.Id }) | </span>
+
+                            <span>@Html.ActionLink("Details", "Details", new { id = item.Id })</span>
+                        }
+                  } 
+                  else
+                  {
+                      @Html.ActionLink("Details", "Details", new { id = item.Id })
+                  }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <table class="table table-sm">
+        @foreach (var claim in User.Claims)
+        {
+            <tr>
+                <td>@claim.Type</td>
+                <td>@claim.Value</td>
+            </tr>
+        }
+    </table>
+}*@
+
